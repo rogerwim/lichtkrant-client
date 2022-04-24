@@ -136,6 +136,9 @@ if (typeof id === "number") {
             if (keys[key]) string += "1";
             else string += "0";
         }
+        if (games[id].colors.configurable) {
+            while (string.length < 7) string += " ";
+        }
 
         return string;
     }
