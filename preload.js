@@ -1,5 +1,5 @@
 const {ipcRenderer} = require('electron');
-const {games, IP} = require('./public/games.js');
+const {games, IP, COLOR} = require('./public/games.js');
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = parseInt(urlParams.get('id'));
@@ -21,63 +21,87 @@ function registerStrokes(block, key) {
 
 if (typeof id === "number") {
     window.addEventListener('load', () => {
-    const title = document.getElementById('title');
-    title.innerText = `Playing ${games[id].name}`;
+        const title = document.getElementById('title');
+        title.innerText = `Playing ${games[id].name}`;
+        const label = document.getElementById('label');
+        const picker = document.getElementById('colorInput');
 
-    const quit = document.getElementById('quit');
-    quit.addEventListener("click", () => {
-        ipcRenderer.send('disconnect');
-        window.location.assign("index.html")
-    });
+        const quit = document.getElementById('quit');
+        quit.addEventListener("click", () => {
+            ipcRenderer.send('disconnect');
+            window.location.assign("index.html")
+        });
 
-    const explanation = games[id].explanation;
-        for (const i in explanation) {
-            const item = explanation[i];
+        const explanation = games[id].explanation;
+            for (const i in explanation) {
+                const item = explanation[i];
 
-            const layout = document.createElement('div');
-            layout.classList.add('layout');
+                const layout = document.createElement('div');
+                layout.classList.add('layout');
 
-            if (item.type === "grid") {
-                for (const y in item.layout) {
-                    const row = document.createElement("div");
-                    row.classList.add("row");
+                if (item.type === "grid") {
+                    for (const y in item.layout) {
+                        const row = document.createElement("div");
+                        row.classList.add("row");
 
-                    for (const x in item.layout[y]) {
-                        const block = document.createElement('div');
-                        block.classList.add('block');
+                        for (const x in item.layout[y]) {
+                            const block = document.createElement('div');
+                            block.classList.add('block');
 
-                        row.append(block);
+                            row.append(block);
 
-                        if (!item.layout[y][x]) continue;
-                        block.classList.add('block-filled');
-                        block.innerText = item.layout[y][x];
+                            if (!item.layout[y][x]) continue;
+                            block.classList.add('block-filled');
+                            block.innerText = item.layout[y][x];
 
-                        registerStrokes(block, item.layout[y][x]);
+                            registerStrokes(block, item.layout[y][x]);
+                        }
+
+                        layout.append(row);
                     }
+                } else if (item.type === "large") {
+                    const block = document.createElement('div');
+                    block.classList.add('block');
+                    block.classList.add('block-filled');
+                    block.classList.add('large');
+                    block.innerText = item.text;
+                    layout.append(block);
 
-                    layout.append(row);
+                    registerStrokes(block, item.text);
                 }
-            } else if (item.type === "large") {
-                const block = document.createElement('div');
-                block.classList.add('block');
-                block.classList.add('block-filled');
-                block.classList.add('large');
-                block.innerText = item.text;
-                layout.append(block);
 
-                registerStrokes(block, item.text);
+                document.body.querySelector(".layouts").append(layout);
+
+                const description = document.createElement('div');
+                description.classList.add('description');
+                description.innerText = item.description;
+
+                document.body.querySelector(".layouts").append(description);
             }
 
-            document.body.querySelector(".layouts").append(layout);
+            if (games[id].colors.visible) {
+                label.style.display = "block";
+            }
+            if (!games[id].colors.configurable) {
+                picker.setAttribute("disabled", "ture");
+            }
 
-            const description = document.createElement('div');
-            description.classList.add('description');
-            description.innerText = item.description;
-
-            document.body.querySelector(".layouts").append(description);
-        }
-
-
+            function setColor(code) {
+                console.log(code);
+                picker.value = code;
+                label.style.backgroundColor = code;
+                if (games[id].colors.configurable) ipcRenderer.send('send', code);
+            }
+            picker.addEventListener("change", () => {
+                console.log(picker.value);
+                setColor(picker.value);
+                localStorage.setItem("COLOR", picker.value);
+            });
+            setColor(COLOR);
+            ipcRenderer.on("data", (event, data) => {
+                if (data.length !== 7 || !data.startsWith("#")) return;
+                setColor(data);
+            });
     });
 
     ipcRenderer.send("connect", {
@@ -86,7 +110,6 @@ if (typeof id === "number") {
     })
 
     const list = games[id].keys;
-    let old = {};
     const keys = {};
     for (const i in list) {
         keys[list[i]] = false;
@@ -97,45 +120,33 @@ if (typeof id === "number") {
         if (typeof keys[e.key] === "undefined") return;
 
         keys[e.key] = true;
-        send(e.key);
+        send();
     });
 
     window.addEventListener("keyup", (e) => {
         if (typeof keys[e.key] === "undefined") return;
 
         keys[e.key] = false;
-        send(e.key);
+        send();
     });
 
-    function current(key) {
-        if (id === 0) {
-            if (!keys[key]) return null;
-
-            return key;
+    function current() {
+        let string = "";
+        for (const key in keys) {
+            if (keys[key]) string += "1";
+            else string += "0";
         }
-        if (id === 1) {
-            if (keys["w"] && keys["s"]) return "c";
-            if (keys["w"]) return "w";
-            if (keys["s"]) return "s";
-
-            return "c";
+        if (games[id].colors.configurable) {
+            while (string.length < 7) string += " ";
         }
-        if (id === 2 || id === 3) {
-            let string = "";
-            for (const key in keys) {
-                if (keys[key]) string += "1";
-                else string += "0";
-            }
 
-            return string;
-        }
+        return string;
     }
 
-    function send(key) {
-        const curr = current(key);
+    function send() {
+        const curr = current();
         if (!curr) return;
 
         ipcRenderer.send("send", curr);
-        old = {...keys};
     }
 }
