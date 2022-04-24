@@ -1,9 +1,15 @@
 let IP = "100.64.0.65";
-const VERSION = "1.0.0";
+let COLOR = "#3495eb"
+const VERSION = "1.1.0";
 if (!localStorage.getItem("IP")) {
     localStorage.setItem("IP", IP);
 } else {
     IP = localStorage.getItem("IP");
+}
+if (!localStorage.getItem("COLOR")) {
+    localStorage.setItem("COLOR", COLOR);
+} else {
+    COLOR = localStorage.getItem("COLOR");
 }
 const games = [
     {
@@ -22,7 +28,11 @@ const games = [
                 ],
                 "description": "Movement keys"
             }
-        ]
+        ],
+        "colors": {
+            "visible": true,
+            "configurable": true
+        }
     },
     {
         "name": "Pong",
@@ -39,7 +49,11 @@ const games = [
                 ],
                 "description": "Movement keys"
             }
-        ]
+        ],
+        "colors": {
+            "visible": true,
+            "configurable": true
+        }
     },
     {
         "name": "Tetris",
@@ -69,8 +83,11 @@ const games = [
                 text: "SPACE",
                 description: "Skip to bottom & ready up"
             }
-        ]
-
+        ],
+        "colors": {
+            "visible": false,
+            "configurable": false
+        }
     },
     {
         "name": "Splash",
@@ -87,12 +104,17 @@ const games = [
                 ],
                 "description": "Movement keys"
             }
-        ]
+        ],
+        "colors": {
+            "visible": true,
+            "configurable": false
+        }
     }
 ]
 
 module.exports = {
     IP,
     games,
-    VERSION
+    VERSION,
+    COLOR
 }

@@ -33,7 +33,7 @@ ipcMain.on('connect', (event, arg) => {
     });
 
     client.on('data', function(data) {
-        win.webContents.send('data', data);
+        win.webContents.send('data', data.toString());
     });
 
     client.on('close', function() {
