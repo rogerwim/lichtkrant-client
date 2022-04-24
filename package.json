@@ -1,0 +1,21 @@
+{
+  "name": "lichtkrant-client",
+  "productName": "Lichtkrant Client",
+  "version": "1.0.0",
+  "description": "Client for DJO Lichtkrant",
+  "main": "index.js",
+  "devDependencies": {
+    "electron": "^18.1.0",
+    "electron-builder": "^23.0.3",
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "node build.js --linux --win --mac"
+  },
+  "repository": "https://github.com/djoamersfoort/lichtkrant-client",
+  "homepage": "https://github.com/djoamersfoort/lichtkrant-client",
+  "author": "sverben",
+  "email": "59171289+sverben@users.noreply.github.com",
+  "license": "MIT"
+}

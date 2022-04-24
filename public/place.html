@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DJO Place</title>
+    <link rel="stylesheet" href="play.css">
+</head>
+<body>
+<webview src="https://place.sverben.nl"></webview>
+<div class="quit">Quit</div>
+<script>
+    const webview = document.querySelector('webview');
+    const quit = document.querySelector('.quit');
+    const quitLeft = quit.getBoundingClientRect().left;
+    console.log(quitLeft);
+    webview.addEventListener('dom-ready', function () {
+        webview.insertCSS(`.login { right: ${window.innerWidth - quitLeft + 10}px !important; border-radius: 5px !important; }`);
+    });
+
+    quit.addEventListener('click', function () {
+        window.location.assign("index.html")
+    });
+</script>
+</body>
+</html>
