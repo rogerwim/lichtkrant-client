@@ -4,9 +4,10 @@ body {
     font-family: sans-serif;
     color: white;
     background-color: #22222c;
-    overflow: hidden;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 .settingsIcon {
@@ -34,6 +35,7 @@ body {
     display: flex;
     gap: 10px;
     flex: 1;
+    flex-wrap: wrap;
 }
 
 .tile {
@@ -47,7 +49,6 @@ body {
     border-radius: 5px;
     border: 1px solid #ffffff10;
     box-sizing: border-box;
-    height: 100%;
     cursor: pointer;
     transition: .1s ease;
 }
