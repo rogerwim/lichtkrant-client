@@ -91,7 +91,7 @@ const games = [
     },
     {
         "name": "Splash",
-        "description": "N&M Games splash for lichtkrant",
+        "description": "N&M Games' Splash for the lichtkrant",
         "color": "#1e7ad5",
         "port": 42069,
         "keys": ["a", "d", "w"],
