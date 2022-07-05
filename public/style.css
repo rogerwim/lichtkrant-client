@@ -28,14 +28,11 @@ body {
 }
 
 .tiles {
-    left: 10px;
-    top: 50%;
-    right: 10px;
-    width: calc(100vw - 20px);
     display: flex;
     gap: 10px;
     flex: 1;
     flex-wrap: wrap;
+    margin: 10px;
 }
 
 .tile {
@@ -77,13 +74,11 @@ body {
 .footer {
     background-color: #1b7070;
     border-radius: 5px;
-    margin-top: 10px;
+    margin: 0 10px 10px;
     padding: 10px;
-    width: calc(100% - 20px);
     border: 1px solid #ffffff20;
     box-sizing: border-box;
     cursor: pointer;
-    margin-bottom: 15px;
 }
 
 .footer:hover {

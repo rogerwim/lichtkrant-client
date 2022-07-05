@@ -12,6 +12,7 @@ function createWindow() {
             webviewTag: true
         }
     });
+    win.removeMenu();
     win.loadFile('public/index.html');
     win.on('closed', () => {
         win = null;

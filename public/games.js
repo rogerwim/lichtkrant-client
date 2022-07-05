@@ -1,6 +1,6 @@
 let IP = "100.64.0.65";
 let COLOR = "#3495eb"
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 if (!localStorage.getItem("IP")) {
     localStorage.setItem("IP", IP);
 } else {
@@ -109,12 +109,37 @@ const games = [
             "visible": true,
             "configurable": false
         }
+    },
+    {
+        "name": "Pac-Man",
+        "kwabbel": true,
+        "description": "Pac-Man for lichtkrant",
+        "color": "#e0c122",
+        "port": 3564,
+        "keys": ["w", "a", "s", "d"],
+        "explanation": [
+            {
+                "type": "grid",
+                "layout": [
+                    [null, "W", null],
+                    ["A", null, "D"],
+                    [null, "S", null]
+                ],
+                "description": "Movement keys"
+            }
+        ],
+        "colors": {
+            "visible": false,
+            "configurable": false
+        }
     }
 ]
 
-module.exports = {
-    IP,
-    games,
-    VERSION,
-    COLOR
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+        IP,
+        games,
+        VERSION,
+        COLOR
+    }
 }
