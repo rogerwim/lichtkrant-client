@@ -1,5 +1,6 @@
-const {ipcRenderer} = require('electron');
-const {games, IP, COLOR} = require('./public/games.js');
+const { ipcRenderer, contextBridge } = require('electron');
+const { games, IP, COLOR, VERSION } = require('./games.js');
+contextBridge.exposeInMainWorld("games", { games, IP, COLOR, VERSION });
 
 const urlParams = new URLSearchParams(window.location.search);
 const id = parseInt(urlParams.get('id'));

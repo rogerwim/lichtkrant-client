@@ -12,15 +12,14 @@ btn.addEventListener("click", () => {
 close.addEventListener("click", () => {
     settings.style.display = "none";
 })
-ip.value = IP;
+ip.value = games.IP;
 
 ip.addEventListener("input", () => {
-    IP = ip.value;
-    localStorage.setItem('IP', IP);
+    localStorage.setItem('IP', ip.value);
 });
 
-for (const i in games) {
-    const game = games[i];
+for (const i in games.games) {
+    const game = games.games[i];
 
     const el = document.createElement('div');
     el.classList.add('tile');
@@ -85,7 +84,7 @@ const compareVersions = (v1Str, v2Str) => {
 fetch("https://api.github.com/repos/djoamersfoort/lichtkrant-client/releases/latest")
     .then(res => res.json())
     .then(data => {
-        if (compareVersions(VERSION, data.tag_name) === "older") {
+        if (compareVersions(games.VERSION, data.tag_name) === "older") {
             update.style.display = "flex";
             updateClose.addEventListener("click", () => {
                 update.style.display = "none";
